@@ -1,6 +1,6 @@
 from rest_framework_nested import routers
 
-from api.views import AircraftViewSet, ReadFlightPageViewSet, FlightPageViewSet, AirportViewSet
+from api.views import AircraftViewSet, AirportViewSet, FlightPageViewSet, ReadFlightPageViewSet
 
 router = routers.SimpleRouter()
 
@@ -12,5 +12,4 @@ aircraft_router.register('flights', ReadFlightPageViewSet)
 
 router.register(r'flights', FlightPageViewSet)
 
-urlpatterns = [
-] + router.urls + aircraft_router.urls
+urlpatterns = [] + router.urls + aircraft_router.urls

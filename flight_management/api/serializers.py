@@ -1,7 +1,7 @@
 from django.utils import timezone
 from rest_framework import serializers
 
-from api.models import Aircraft, Flight, Airport
+from api.models import Aircraft, Airport, Flight
 
 
 class AircraftSerializer(serializers.ModelSerializer):
@@ -14,9 +14,7 @@ class AircraftSerializer(serializers.ModelSerializer):
 class FlightSerializer(serializers.ModelSerializer):
     class Meta:
         model = Flight
-        fields = ('id', 'aircraft',
-                  'departure_airport', 'depart_at',
-                  'arrival_airport', 'arrive_at')
+        fields = ('id', 'aircraft', 'departure_airport', 'depart_at', 'arrival_airport', 'arrive_at')
 
     def validate(self, attrs):
         if attrs['depart_at'] < timezone.now():
@@ -29,16 +27,13 @@ class FlightSerializer(serializers.ModelSerializer):
 class CreateFlightSerializer(FlightSerializer):
     class Meta:
         model = Flight
-        fields = ('id', 'aircraft',
-                  'departure_airport', 'depart_at',
-                  'arrival_airport', 'arrive_at')
+        fields = ('id', 'aircraft', 'departure_airport', 'depart_at', 'arrival_airport', 'arrive_at')
 
 
 class UpdateFlightSerializer(FlightSerializer):
     class Meta:
         model = Flight
-        fields = ('id', 'departure_airport', 'depart_at',
-                  'arrival_airport', 'arrive_at')
+        fields = ('id', 'departure_airport', 'depart_at', 'arrival_airport', 'arrive_at')
 
 
 class MinutesDurationField(serializers.DurationField):
@@ -51,10 +46,15 @@ class InFlightSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Flight
-        fields = ('id', 'aircraft',
-                  'departure_airport', 'depart_at',
-                  'arrival_airport', 'arrive_at',
-                  'in_flight_minutes')
+        fields = (
+            'id',
+            'aircraft',
+            'departure_airport',
+            'depart_at',
+            'arrival_airport',
+            'arrive_at',
+            'in_flight_minutes',
+        )
 
 
 class AirportSerializer(serializers.ModelSerializer):

@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 import os
 from pathlib import Path
+
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -114,28 +115,13 @@ AUTH_PASSWORD_VALIDATORS = [
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
-    'formatters': {
-        'verbose': {
-            'format': '%(asctime)s %(levelname)s [%(name)s:%(lineno)s] %(message)s'
-        }
-    },
+    'formatters': {'verbose': {'format': '%(asctime)s %(levelname)s [%(name)s:%(lineno)s] %(message)s'}},
     'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
-            'formatter': 'verbose'
-        },
+        'console': {'class': 'logging.StreamHandler', 'formatter': 'verbose'},
     },
     'loggers': {
-        'root': {
-            'handlers': ['console'],
-            'level': 'INFO',
-            'propagate': False
-        },
-        'django': {
-            'handlers': ['console'],
-            'level': 'INFO',
-            'propagate': False
-        },
+        'root': {'handlers': ['console'], 'level': 'INFO', 'propagate': False},
+        'django': {'handlers': ['console'], 'level': 'INFO', 'propagate': False},
         'django.db.backends': {
             'handlers': ['console'],
             'level': 'DEBUG',
@@ -147,7 +133,7 @@ LOGGING = {
 REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
-    'PAGE_SIZE': 100
+    'PAGE_SIZE': 100,
 }
 
 

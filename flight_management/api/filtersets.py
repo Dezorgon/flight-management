@@ -1,5 +1,6 @@
-from django_filters import FilterSet, DateTimeFilter
-from api.models import Flight, Airport
+from django_filters import DateTimeFilter, FilterSet
+
+from api.models import Airport, Flight
 
 
 class AirportFilter(FilterSet):

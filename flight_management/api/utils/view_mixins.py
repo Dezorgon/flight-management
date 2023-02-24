@@ -1,8 +1,10 @@
+from typing import Any
+
 from django.core.exceptions import ImproperlyConfigured
 
 
 class GetSerializerMixin:
-    serializer_classes = None
+    serializer_classes: dict[str, Any] = None
 
     def get_serializer_class(self):
         if self.serializer_classes is None:
@@ -16,4 +18,3 @@ class GetSerializerMixin:
             serializer = self.serializer_classes['default']
 
         return serializer
-

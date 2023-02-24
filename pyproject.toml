@@ -1,0 +1,41 @@
+[tool.isort]
+profile = 'black'
+filter_files = true
+line_length = 120
+known_first_party=[
+    'flight_management',
+    'api',
+]
+
+[tool.black]
+line-length = 120
+skip-string-normalization = true
+
+[tool.mypy]
+check_untyped_defs = false
+disable_error_code = 'annotation-unchecked'
+ignore_missing_imports = true
+no_implicit_optional = true
+show_error_codes = true
+strict_optional = false
+
+[tool.flake8]
+count = true
+max-line-length = 120
+extend-ignore = [
+    'E203',  # for compatibility with black
+]
+per-file-ignores = [
+    '__init__.py:F401,F403',
+    '*/migrations/*:F401',
+]
+
+[tool.bandit]
+skips = [
+    'B101',  # asserts
+    'B105',  # hardcoded strings
+    'B108',  # hardcoded tmp folders
+]
+exclude_dirs = [
+    'tests',
+]
