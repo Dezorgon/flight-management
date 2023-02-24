@@ -1,0 +1,26 @@
+version: '3.9'
+
+services:
+  db:
+    image: postgres:12.0-alpine
+    volumes:
+      - db_data:/var/lib/postgresql/data/
+    env_file:
+       - .env
+    ports:
+      - "5432:5432"
+
+  web:
+    build: ./flight_management
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./flight_management:/app
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+
+volumes:
+  db_data:
