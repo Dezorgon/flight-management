@@ -9,12 +9,12 @@ class AirportFilter(FilterSet):
 
     class Meta:
         model = Airport
-        fields = [
+        fields = (
             "icao",
             "name",
             "date_from",
             "date_to",
-        ]
+        )
 
 
 class FlightFilter(FilterSet):
@@ -23,9 +23,9 @@ class FlightFilter(FilterSet):
 
     class Meta:
         model = Flight
-        fields = [
+        fields = (
             "departure_airport__icao",
             "depart_at",
             "arrival_airport__icao",
             "arrive_at",
-        ]
+        )

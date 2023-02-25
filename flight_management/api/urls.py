@@ -12,4 +12,4 @@ aircraft_router.register('flights', ReadFlightPageViewSet)
 
 router.register(r'flights', FlightPageViewSet)
 
-urlpatterns = [] + router.urls + aircraft_router.urls
+urlpatterns = router.urls + aircraft_router.urls

@@ -29,13 +29,3 @@ per-file-ignores = [
     '__init__.py:F401,F403',
     '*/migrations/*:F401',
 ]
-
-[tool.bandit]
-skips = [
-    'B101',  # asserts
-    'B105',  # hardcoded strings
-    'B108',  # hardcoded tmp folders
-]
-exclude_dirs = [
-    'tests',
-]

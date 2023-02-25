@@ -1,12 +1,12 @@
 from datetime import datetime
 
-from django.db.models import Count, F, Prefetch, Q
-from django.db.models.functions import Greatest, Least
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters, mixins
 from rest_framework.viewsets import GenericViewSet, ModelViewSet
+from utils.view_mixins import GetSerializerMixin
 
+from api import services
 from api.filtersets import AirportFilter, FlightFilter
 from api.models import Aircraft, Airport, Flight
 from api.serializers import (
@@ -16,7 +16,6 @@ from api.serializers import (
     FlightSerializer,
     UpdateFlightSerializer,
 )
-from api.utils.view_mixins import GetSerializerMixin
 
 
 class AirportViewSet(GetSerializerMixin, ModelViewSet):
@@ -26,10 +25,10 @@ class AirportViewSet(GetSerializerMixin, ModelViewSet):
         'default': AirportSerializer,
     }
 
-    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
     filterset_class = AirportFilter
-    search_fields = ['icao']
-    ordering_fields = ['icao']
+    search_fields = ('icao',)
+    ordering_fields = ('icao',)
 
     def get_queryset(self):
         if self.action == 'list':
@@ -39,19 +38,9 @@ class AirportViewSet(GetSerializerMixin, ModelViewSet):
             date_from = form.cleaned_data.get("date_from") or datetime.min
             date_to = form.cleaned_data.get("date_to") or datetime.max
 
-            return self.queryset.annotate(
-                in_flight_count=Count(
-                    'departure_flights',
-                    filter=Q(departure_flights__arrive_at__gt=date_from, departure_flights__depart_at__lt=date_to),
-                    distinct=True,
-                )
-            ).prefetch_related(
-                Prefetch(
-                    "departure_flights",
-                    Flight.objects.annotate(
-                        in_flight_minutes=Least(F('arrive_at'), date_to) - Greatest(F('depart_at'), date_from)
-                    ).filter(arrive_at__gt=date_from, depart_at__lt=date_to),
-                )
+            return services.airport.get_airports_with_departure_flights(
+                date_from=date_from,
+                date_to=date_to,
             )
 
         return self.queryset
@@ -63,9 +52,9 @@ class AircraftViewSet(GetSerializerMixin, ModelViewSet):
         'default': AircraftSerializer,
     }
 
-    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
-    search_fields = ['serial_number', 'manufacturer']
-    ordering_fields = ['serial_number']
+    filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
+    search_fields = ('serial_number', 'manufacturer')
+    ordering_fields = ('serial_number',)
 
 
 class ReadFlightPageViewSet(GetSerializerMixin, mixins.RetrieveModelMixin, mixins.ListModelMixin, GenericViewSet):
@@ -93,7 +82,7 @@ class FlightPageViewSet(GetSerializerMixin, ModelViewSet):
         'default': FlightSerializer,
     }
 
-    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
     filterset_class = FlightFilter
-    search_fields = ['departure_airport_icao', 'arrival_airport_icao']
-    ordering_fields = ["depart_at", "arrive_at"]
+    search_fields = ('departure_airport_icao', 'arrival_airport_icao')
+    ordering_fields = ("depart_at", "arrive_at")
