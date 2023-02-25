@@ -54,4 +54,4 @@ def get_airports_with_departure_flights(
         date_from=date_from,
         date_to=date_to,
     )
-    return queryset
+    return queryset.all()
